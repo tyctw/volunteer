@@ -161,7 +161,7 @@ const App: React.FC = () => {
           {/* Main Title */}
           <div className="relative mb-10">
               <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-[1.1]">
-                  免試入學
+                  國中教育會考
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 pb-2">
                       & 志願選填
                   </span>
