@@ -24,7 +24,7 @@ export const PORTAL_DATA: RegionLink[] = [
     url: 'https://hhm.entry.edu.tw',
     category: RegionCategory.NORTH,
     description: '竹苗區高級中等學校免試入學委員會',
-    tags: ['志願選填', '榜單查詢'],
+    tags: ['志願選填', '序位查詢'],
   },
   {
     id: 'iln',
@@ -32,7 +32,7 @@ export const PORTAL_DATA: RegionLink[] = [
     url: 'https://iln.entry.edu.tw/',
     category: RegionCategory.NORTH,
     description: '宜蘭區高級中等學校免試入學作業平台',
-    tags: ['放榜查詢', '志願選填'],
+    tags: ['序位查詢', '志願選填'],
   },
 
   // Central
@@ -102,7 +102,7 @@ export const PORTAL_DATA: RegionLink[] = [
     url: 'https://hlc.entry.edu.tw/',
     category: RegionCategory.EAST,
     description: '花蓮區高級中等學校免試入學平台',
-    tags: ['放榜查詢', '志願選填'],
+    tags: ['序位查詢', '志願選填'],
   },
   {
     id: 'ttf',
@@ -110,7 +110,7 @@ export const PORTAL_DATA: RegionLink[] = [
     url: 'https://ttf.entry.edu.tw/',
     category: RegionCategory.EAST,
     description: '台東區高級中等學校免試入學系統',
-    tags: ['放榜查詢', '志願選填'],
+    tags: ['序位查詢', '志願選填'],
   },
 
   // Islands
