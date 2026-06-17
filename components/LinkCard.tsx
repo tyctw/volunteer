@@ -7,8 +7,8 @@ interface LinkCardProps {
   link: RegionLink;
 }
 
-// Target Date: 2026/06/18 08:00:00
-const TARGET_DATE = new Date('2026-06-18T08:00:00');
+// Target Date: 2026/06/17 18:27:00
+const TARGET_DATE = new Date('2026-06-17T18:27:00');
 
 export const LinkCard: React.FC<LinkCardProps> = ({ link }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
