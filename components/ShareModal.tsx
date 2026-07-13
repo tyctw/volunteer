@@ -1,135 +1,63 @@
 import React, { useState } from 'react';
-import { X, Copy, Check, Facebook, MessageCircle, Share2, Smartphone, QrCode } from 'lucide-react';
+import { Check, Copy, ExternalLink, Facebook, Link, MessageCircle, Share2, X } from 'lucide-react';
 
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+const shareUrl = 'https://tyctw.github.io/volunteer/';
+const shareTitle = '教育會考志願選填資訊｜升學資源與選填指南';
+const shareText = '整合志願選填資源、落點分析與選填文章，協助掌握下一步。';
+
 export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose }) => {
   const [copied, setCopied] = useState(false);
-  const url = typeof window !== 'undefined' ? window.location.href : '';
+  const imageUrl = '/volunteer/og.png';
+  const encodedUrl = encodeURIComponent(shareUrl);
 
   if (!isOpen) return null;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(url);
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+    } catch {
+      const input = document.createElement('textarea');
+      input.value = shareUrl;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      input.remove();
+    }
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    window.setTimeout(() => setCopied(false), 2200);
   };
 
-  const handleNativeShare = async () => {
+  const nativeShare = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: '全國會考序位查詢與志願選填網址整理平台',
-          text: '彙整全國各就學區志願選填、序位查詢及放榜查詢連結，快速掌握升學關鍵時刻！',
-          url: url,
-        });
-      } catch (err) {
-        console.error('Error sharing:', err);
+        await navigator.share({ title: shareTitle, text: shareText, url: shareUrl });
+        return;
+      } catch (error) {
+        if ((error as Error).name === 'AbortError') return;
       }
     }
+    await copyLink();
   };
 
-  const encodedUrl = encodeURIComponent(url);
-  const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
   const lineShare = `https://social-plugins.line.me/lineit/share?url=${encodedUrl}`;
+  const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div 
-        className="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity animate-in fade-in duration-200"
-        onClick={onClose}
-      />
-      
-      <div className="relative bg-white/95 backdrop-blur-2xl rounded-[32px] shadow-2xl w-full max-w-sm overflow-hidden animate-in zoom-in-95 duration-300 border border-white/50 ring-1 ring-black/5">
-        
-        {/* Header */}
-        <div className="bg-white/50 p-6 border-b border-slate-100 flex justify-between items-center">
-            <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
-                <Share2 className="w-5 h-5 text-indigo-600" />
-                分享網站
-            </h3>
-            <button 
-                onClick={onClose}
-                className="w-8 h-8 flex items-center justify-center hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors"
-            >
-                <X className="w-5 h-5" />
-            </button>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="share-title">
+      <button className="absolute inset-0 cursor-default bg-slate-950/55 backdrop-blur-md" onClick={onClose} aria-label="關閉分享視窗" />
+      <section className="relative w-full max-w-md overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-[0_32px_90px_-26px_rgba(15,23,42,.55)]">
+        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5"><div className="flex items-center gap-3"><span className="rounded-xl bg-indigo-50 p-2 text-indigo-600"><Share2 className="h-5 w-5" /></span><div><h2 id="share-title" className="font-black text-slate-900">分享網站</h2><p className="text-xs font-medium text-slate-400">讓更多人找到升學資源</p></div></div><button onClick={onClose} className="rounded-xl p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700" aria-label="關閉"><X className="h-5 w-5" /></button></div>
+        <div className="p-6"><div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50"><img src={imageUrl} alt="教育會考志願選填資訊分享預覽圖" className="aspect-[1.91/1] w-full object-cover" /><div className="bg-white p-4"><p className="text-sm font-black text-slate-900">教育會考志願選填資訊</p><p className="mt-1 text-xs leading-5 text-slate-500">升學資源、落點分析與選填指南</p></div></div>
+          <button onClick={nativeShare} className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 px-5 py-4 text-sm font-black text-white shadow-lg shadow-slate-900/15 transition hover:bg-indigo-600"><Share2 className="h-5 w-5" />立即分享</button>
+          <div className="mt-5 grid grid-cols-3 gap-3"><a href={lineShare} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-100 p-3 text-xs font-bold text-slate-600 transition hover:border-[#06C755]/30 hover:bg-[#06C755]/10 hover:text-[#06C755]"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#06C755] text-white shadow-sm transition group-hover:scale-110"><MessageCircle className="h-5 w-5" /></span>LINE</a><a href={facebookShare} target="_blank" rel="noopener noreferrer" className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-100 p-3 text-xs font-bold text-slate-600 transition hover:border-[#1877F2]/30 hover:bg-[#1877F2]/10 hover:text-[#1877F2]"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#1877F2] text-white shadow-sm transition group-hover:scale-110"><Facebook className="h-5 w-5" /></span>Facebook</a><button onClick={copyLink} className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-100 p-3 text-xs font-bold text-slate-600 transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600"><span className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-white shadow-sm transition group-hover:scale-110">{copied ? <Check className="h-5 w-5 text-emerald-300" /> : <Link className="h-5 w-5" />}</span>{copied ? '已複製' : '複製連結'}</button></div>
+          <a href={shareUrl} target="_blank" rel="noopener noreferrer" className="mt-5 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3 text-xs font-medium text-slate-500 transition hover:bg-slate-100"><span className="truncate">{shareUrl}</span><ExternalLink className="ml-3 h-4 w-4 shrink-0" /></a>
         </div>
-
-        <div className="p-6 flex flex-col items-center">
-            {/* QR Code Section */}
-            <div className="relative group mb-6">
-                <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-3xl blur-lg opacity-20"></div>
-                <div className="bg-white p-4 rounded-3xl shadow-sm border border-slate-100 w-48 h-48 flex items-center justify-center relative z-10">
-                    <img 
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodedUrl}&bgcolor=ffffff`}
-                        alt="Website QR Code"
-                        className="w-full h-full object-contain"
-                    />
-                </div>
-            </div>
-
-            <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-4">掃描 QR Code 快速分享</p>
-
-            {/* URL Input */}
-            <div className="w-full relative mb-6">
-                <input 
-                    type="text" 
-                    value={url} 
-                    readOnly
-                    className="w-full pl-4 pr-12 py-3 bg-slate-100 text-slate-600 text-sm font-medium rounded-xl focus:outline-none border border-transparent focus:border-indigo-500/30 selection:bg-indigo-200"
-                />
-                <button 
-                    onClick={handleCopy}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-2 hover:bg-white rounded-lg text-slate-400 hover:text-indigo-600 transition-all shadow-sm"
-                    title="複製連結"
-                >
-                    {copied ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
-                </button>
-            </div>
-
-            {/* Share Buttons */}
-            <div className="grid grid-cols-3 gap-3 w-full">
-                <a 
-                    href={lineShare} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl hover:bg-[#06C755]/10 text-slate-600 hover:text-[#06C755] transition-colors group"
-                >
-                    <div className="w-10 h-10 bg-[#06C755] text-white rounded-full flex items-center justify-center shadow-lg shadow-green-500/20 group-hover:scale-110 transition-transform">
-                        <MessageCircle className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold">LINE</span>
-                </a>
-
-                <a 
-                    href={facebookShare} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex flex-col items-center justify-center gap-2 p-3 rounded-2xl hover:bg-[#1877F2]/10 text-slate-600 hover:text-[#1877F2] transition-colors group"
-                >
-                    <div className="w-10 h-10 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                        <Facebook className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold">Facebook</span>
-                </a>
-
-                <button 
-                    onClick={handleNativeShare}
-                    disabled={!navigator.share}
-                    className={`flex flex-col items-center justify-center gap-2 p-3 rounded-2xl transition-colors group ${!navigator.share ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-100 text-slate-600 hover:text-slate-900'}`}
-                >
-                    <div className="w-10 h-10 bg-slate-800 text-white rounded-full flex items-center justify-center shadow-lg shadow-slate-500/20 group-hover:scale-110 transition-transform">
-                        <Smartphone className="w-5 h-5" />
-                    </div>
-                    <span className="text-xs font-bold">更多</span>
-                </button>
-            </div>
-        </div>
-      </div>
+      </section>
     </div>
   );
 };

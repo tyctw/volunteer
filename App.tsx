@@ -5,24 +5,20 @@ import { RegionCategory } from './types';
 import { LinkCard } from './components/LinkCard';
 import { ScheduleModal } from './components/ScheduleModal';
 import { CountdownTimer } from './components/CountdownTimer';
-import { InfoModal } from './components/InfoModal';
-import { PromotionModal } from './components/PromotionModal';
 import { ShareModal } from './components/ShareModal';
+import { PromotionModal } from './components/PromotionModal';
+import { ResourceCard } from './components/ResourceCard';
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<RegionCategory | 'ALL'>('ALL');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-  // Trigger Promotion Modal on load
   useEffect(() => {
-    const timer = setTimeout(() => {
-        setIsPromoModalOpen(true);
-    }, 1500); // Show after 1.5 seconds for better UX
+    const timer = setTimeout(() => setIsPromoModalOpen(true), 1500);
     return () => clearTimeout(timer);
   }, []);
 
@@ -64,7 +60,7 @@ const App: React.FC = () => {
           
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-4 text-sm font-semibold text-slate-500 mr-2">
-              <button onClick={() => setIsInfoModalOpen(true)} className="hover:text-indigo-600 transition-colors px-3 py-2 rounded-lg hover:bg-white/50">使用說明</button>
+              <a href="articles.html" className="hover:text-indigo-600 transition-colors px-3 py-2 rounded-lg hover:bg-white/50">文章專區</a>
               <a href="https://cap.rcpet.edu.tw/" target="_blank" rel="noopener noreferrer" className="hover:text-indigo-600 transition-colors flex items-center gap-1.5 px-3 py-2 rounded-lg hover:bg-white/50">
                 會考官網 <ExternalLink className="w-3.5 h-3.5" />
               </a>
@@ -91,22 +87,25 @@ const App: React.FC = () => {
       {/* Drawer Menu */}
       {isDrawerOpen && (
         <div className="fixed inset-0 z-[60] flex justify-end">
-          <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" onClick={() => setIsDrawerOpen(false)} />
-          <div className="relative w-80 bg-white/90 backdrop-blur-2xl h-full shadow-2xl flex flex-col p-6 animate-in slide-in-from-right duration-300 border-l border-white/50">
-             <div className="flex justify-between items-center mb-8">
+          <div className="absolute inset-0 bg-slate-950/35 backdrop-blur-md transition-opacity" onClick={() => setIsDrawerOpen(false)} />
+          <div className="relative flex h-full w-[22rem] max-w-[92vw] flex-col overflow-hidden border-l border-white/70 bg-slate-50 shadow-[-20px_0_60px_-24px_rgba(15,23,42,.45)] animate-in slide-in-from-right duration-300 sm:w-[25rem]">
+             <div className="relative overflow-hidden border-b border-slate-100 bg-white px-6 pb-7 pt-8">
+               <div className="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-indigo-200/45 blur-3xl" />
+               <div className="relative flex items-center justify-between">
                <h2 className="text-xl font-bold text-slate-800">更多資源</h2>
-               <button onClick={() => setIsDrawerOpen(false)} className="p-2 hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors">
+               <button onClick={() => setIsDrawerOpen(false)} className="rounded-xl border border-slate-100 bg-white p-2 text-slate-400 shadow-sm transition hover:border-slate-200 hover:bg-slate-50 hover:text-slate-700">
                  <X className="w-6 h-6" />
                </button>
              </div>
+             </div>
              
-             <div className="space-y-3 flex-1 overflow-y-auto">
+             <div className="flex-1 space-y-3 overflow-y-auto px-5 py-6">
                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">分析與分享</div>
-               <DrawerLink href="https://rcpett.vercel.app/" icon={<BarChart3 className="w-5 h-5" />} label="會考落點分析" color="text-violet-600" bg="bg-violet-50" />
+               <DrawerLink href="https://tyctw.github.io/" icon={<BarChart3 className="w-5 h-5" />} label="會考落點分析" color="text-violet-600" bg="bg-violet-50" />
                <DrawerLink href="https://tyctw.github.io/score/" icon={<Share2 className="w-5 h-5" />} label="會考序位分享" color="text-emerald-600" bg="bg-emerald-50" />
                <DrawerLink href="https://tyctw.github.io/shared/" icon={<Users className="w-5 h-5" />} label="會考錄取分享" color="text-orange-600" bg="bg-orange-50" />
 
-               <div className="h-px bg-slate-200/50 my-6" />
+               <div className="my-6 h-px bg-slate-200" />
                
                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 px-2">常用連結</div>
                <DrawerLink 
@@ -119,18 +118,18 @@ const App: React.FC = () => {
                />
                <DrawerLink href="https://cap.rcpet.edu.tw/" icon={<ExternalLink className="w-5 h-5" />} label="國中會考官網" />
                <button 
-                onClick={() => { setIsInfoModalOpen(true); setIsDrawerOpen(false); }}
-                className="flex items-center gap-4 p-3.5 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all group w-full text-left"
+                onClick={() => { window.location.href = 'articles.html'; }}
+                className="group flex w-full items-center gap-4 rounded-2xl border border-transparent bg-white p-3.5 text-left font-bold text-slate-600 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-md"
                >
-                 <div className="p-2.5 rounded-xl bg-slate-50 text-slate-400 group-hover:scale-110 transition-transform shadow-sm">
+                 <div className="rounded-xl bg-slate-100 p-2.5 text-slate-500 shadow-sm transition-transform group-hover:scale-110 group-hover:bg-indigo-50 group-hover:text-indigo-600">
                     <HelpCircle className="w-5 h-5" />
                  </div>
-                 <span className="group-hover:text-slate-900 transition-colors">使用說明與QA</span>
+                 <span className="group-hover:text-slate-900 transition-colors">文章專區</span>
                </button>
              </div>
              
-             <div className="mt-auto pt-6 border-t border-slate-100 text-center">
-               <a href="mailto:tyctw.analyze@gmail.com" className="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors p-3 bg-slate-50 rounded-xl w-full justify-center hover:bg-indigo-50">
+             <div className="mt-auto border-t border-slate-200 bg-white px-5 pb-6 pt-5 text-center">
+               <a href="mailto:tyctw.analyze@gmail.com" className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 p-3.5 text-sm font-bold text-white shadow-lg shadow-slate-900/10 transition hover:bg-indigo-600">
                   <Mail className="w-4 h-4" /> 聯繫我們
                </a>
                <p className="text-xs text-slate-400 mt-4 font-medium">© {new Date().getFullYear()} 全國會考入口網整合平台</p>
@@ -141,12 +140,11 @@ const App: React.FC = () => {
 
       {/* Modals */}
       <ScheduleModal isOpen={isScheduleModalOpen} onClose={() => setIsScheduleModalOpen(false)} />
-      <InfoModal isOpen={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)} />
       <PromotionModal isOpen={isPromoModalOpen} onClose={() => setIsPromoModalOpen(false)} />
       <ShareModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} />
 
       {/* Hero Section */}
-      <header className="relative pt-32 pb-20 px-4 overflow-visible">
+      <header className="relative pt-32 pb-10 px-4 overflow-visible">
         <div className="max-w-6xl mx-auto text-center relative z-10 flex flex-col items-center">
           
           {/* Notification Badge */}
@@ -245,16 +243,16 @@ const App: React.FC = () => {
                 href="https://tyctw.github.io/score/"
                 icon={<Share2 className="w-7 h-7" />}
                 title="會考序位分享"
-                desc="匿名分享會考成績與序位，協助建立大數據，造福學弟妹。"
+                desc="匿名分享會考成績與序位。"
                 fromColor="from-emerald-400"
                 toColor="to-teal-500"
                 shadowColor="shadow-emerald-500/30"
             />
             <ResourceCard 
-                href="https://rcpett.vercel.app/"
+                href="https://tyctw.github.io/"
                 icon={<BarChart3 className="w-7 h-7" />}
                 title="會考落點分析"
-                desc="輸入成績，運用歷年大數據進行精準預測與志願建議。"
+                desc="輸入成績，取得志願建議。"
                 fromColor="from-violet-400"
                 toColor="to-purple-500"
                 shadowColor="shadow-purple-500/30"
@@ -263,7 +261,7 @@ const App: React.FC = () => {
                 href="https://tyctw.github.io/shared/"
                 icon={<Users className="w-7 h-7" />}
                 title="會考錄取分享"
-                desc="查詢歷年學長姐的實際錄取分數與志願序參考。"
+                desc="查詢歷年錄取分數與志願序。"
                 fromColor="from-orange-400"
                 toColor="to-amber-500"
                 shadowColor="shadow-orange-500/30"
@@ -339,7 +337,7 @@ const App: React.FC = () => {
             </div>
             
             <div className="flex flex-wrap justify-center gap-8 mb-8 text-sm font-bold text-slate-500">
-                <button onClick={() => setIsInfoModalOpen(true)} className="hover:text-indigo-600 transition-colors">使用說明</button>
+                <a href="articles.html" className="hover:text-indigo-600 transition-colors">文章專區</a>
                 <a href="https://cap.rcpet.edu.tw/" target="_blank" className="hover:text-indigo-600 transition-colors">官方網站</a>
                 <a href="mailto:tyctw.analyze@gmail.com" className="hover:text-indigo-600 transition-colors flex items-center gap-2">
                     <Mail className="w-4 h-4" />
@@ -367,16 +365,16 @@ const DrawerLink = ({ href, onClick, icon, label, color = "text-slate-400", bg =
     onClick={onClick}
     target={href.startsWith('http') ? "_blank" : "_self"}
     rel={href.startsWith('http') ? "noopener noreferrer" : ""}
-    className="flex items-center gap-4 p-3.5 rounded-2xl hover:bg-slate-50 text-slate-600 font-bold transition-all group"
+    className="group flex items-center gap-4 rounded-2xl border border-transparent bg-white p-3.5 font-bold text-slate-600 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-md"
   >
-    <div className={`p-2.5 rounded-xl ${bg} ${color} group-hover:scale-110 transition-transform shadow-sm`}>
+    <div className={`rounded-xl p-2.5 ${bg} ${color} shadow-sm transition-transform group-hover:scale-110`}>
         {icon}
     </div>
     <span className="group-hover:text-slate-900 transition-colors">{label}</span>
   </a>
 );
 
-const ResourceCard = ({ href, icon, title, desc, fromColor, toColor, shadowColor }: any) => (
+const LegacyResourceCard = ({ href, icon, title, desc, fromColor, toColor, shadowColor }: any) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className={`group relative bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.05)] hover:shadow-2xl hover:${shadowColor} hover:-translate-y-2 transition-all duration-300 flex flex-col h-full overflow-hidden`}>
       <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${fromColor} ${toColor} rounded-full blur-[40px] opacity-0 group-hover:opacity-20 transition-opacity duration-500 -mr-10 -mt-10`}></div>
       
