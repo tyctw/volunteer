@@ -8,5 +8,15 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        articles: 'articles.html',
+        guide: 'guide.html',
+        info: 'info.html',
+        ranking: 'ranking.html',
+        afterSubmission: 'after-submission.html',
+      },
+    },
   }
 })
