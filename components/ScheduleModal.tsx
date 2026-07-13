@@ -20,10 +20,11 @@ export const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose })
   ];
 
   return (
-    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-      <div 
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label="重要日程快訊">
+      <button type="button"
         className="absolute inset-0 bg-slate-900/40 backdrop-blur-md transition-opacity"
         onClick={onClose}
+        aria-label="關閉重要日程快訊"
       />
       
       <div className="relative bg-white/90 backdrop-blur-2xl rounded-[32px] shadow-2xl w-full max-w-lg overflow-hidden animate-in fade-in zoom-in-95 duration-300 flex flex-col max-h-[90vh] border border-white/50 ring-1 ring-black/5">
@@ -39,6 +40,7 @@ export const ScheduleModal: React.FC<ScheduleModalProps> = ({ isOpen, onClose })
             <button 
                 onClick={onClose}
                 className="w-10 h-10 flex items-center justify-center hover:bg-slate-100 rounded-full text-slate-400 hover:text-slate-600 transition-colors"
+                aria-label="關閉"
             >
                 <X className="w-5 h-5" />
             </button>

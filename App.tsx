@@ -22,6 +22,15 @@ const App: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (!isDrawerOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setIsDrawerOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [isDrawerOpen]);
+
   const categories = ['ALL', ...Object.values(RegionCategory)];
 
   const filteredLinks = useMemo(() => {
@@ -39,6 +48,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col relative bg-slate-50 selection:bg-indigo-500 selection:text-white overflow-x-hidden">
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:rounded-xl focus:bg-slate-900 focus:px-4 focus:py-3 focus:text-sm focus:font-bold focus:text-white">跳至主要內容</a>
       
       {/* Aurora Background Effects */}
       <div className="fixed inset-0 w-full h-full overflow-hidden pointer-events-none z-0">
@@ -49,14 +59,14 @@ const App: React.FC = () => {
       </div>
 
       {/* Navbar - Floating Glass */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 sm:px-6 pointer-events-none">
+      <nav aria-label="主要導覽" className="fixed top-0 left-0 right-0 z-50 px-4 pt-4 sm:px-6 pointer-events-none">
         <div className="max-w-7xl mx-auto bg-white/70 backdrop-blur-xl border border-white/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] rounded-2xl h-16 px-6 flex items-center justify-between pointer-events-auto transition-all duration-300">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
+          <button type="button" className="flex items-center gap-3 cursor-pointer group" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} aria-label="回到頁面頂端">
             <div className="bg-gradient-to-br from-indigo-500 to-violet-600 text-white p-2 rounded-xl shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-300">
               <GraduationCap className="w-5 h-5" />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-slate-800 to-slate-600 tracking-tight">全國會考入口網</span>
-          </div>
+          </button>
           
           <div className="flex items-center gap-3">
             <div className="hidden md:flex items-center gap-4 text-sm font-semibold text-slate-500 mr-2">
@@ -69,7 +79,7 @@ const App: React.FC = () => {
             <button 
                 onClick={() => setIsShareModalOpen(true)}
                 className="p-2.5 text-slate-500 hover:bg-white hover:text-indigo-600 rounded-xl transition-all shadow-sm border border-transparent hover:border-slate-200 hover:shadow-md hidden md:flex items-center justify-center"
-                title="分享網站"
+                aria-label="分享網站"
             >
                 <QrCode className="w-5 h-5" />
             </button>
@@ -77,6 +87,9 @@ const App: React.FC = () => {
             <button 
               onClick={() => setIsDrawerOpen(true)}
               className="p-2.5 text-slate-600 hover:bg-white hover:text-indigo-600 rounded-xl transition-all shadow-sm border border-transparent hover:border-slate-200 hover:shadow-md"
+              aria-label="開啟更多資源選單"
+              aria-expanded={isDrawerOpen}
+              aria-controls="resource-menu"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -87,13 +100,13 @@ const App: React.FC = () => {
       {/* Drawer Menu */}
       {isDrawerOpen && (
         <div className="fixed inset-0 z-[60] flex justify-end">
-          <div className="absolute inset-0 bg-slate-950/35 backdrop-blur-md transition-opacity" onClick={() => setIsDrawerOpen(false)} />
-          <div className="relative flex h-full w-[22rem] max-w-[92vw] flex-col overflow-hidden border-l border-white/70 bg-slate-50 shadow-[-20px_0_60px_-24px_rgba(15,23,42,.45)] animate-in slide-in-from-right duration-300 sm:w-[25rem]">
+          <button type="button" className="absolute inset-0 cursor-default bg-slate-950/35 backdrop-blur-md transition-opacity" onClick={() => setIsDrawerOpen(false)} aria-label="關閉更多資源選單" />
+          <aside id="resource-menu" role="dialog" aria-modal="true" aria-labelledby="drawer-title" className="relative flex h-full w-[22rem] max-w-[92vw] flex-col overflow-hidden border-l border-white/70 bg-slate-50 shadow-[-20px_0_60px_-24px_rgba(15,23,42,.45)] animate-in slide-in-from-right duration-300 sm:w-[25rem]">
              <div className="relative overflow-hidden border-b border-slate-100 bg-white px-6 pb-7 pt-8">
                <div className="absolute -right-10 -top-12 h-40 w-40 rounded-full bg-indigo-200/45 blur-3xl" />
                <div className="relative flex items-center justify-between">
-               <h2 className="text-xl font-bold text-slate-800">更多資源</h2>
-               <button onClick={() => setIsDrawerOpen(false)} className="rounded-xl border border-slate-100 bg-white p-2 text-slate-400 shadow-sm transition hover:border-slate-200 hover:bg-slate-50 hover:text-slate-700">
+               <h2 id="drawer-title" className="text-xl font-bold text-slate-800">更多資源</h2>
+               <button onClick={() => setIsDrawerOpen(false)} className="rounded-xl border border-slate-100 bg-white p-2 text-slate-400 shadow-sm transition hover:border-slate-200 hover:bg-slate-50 hover:text-slate-700" aria-label="關閉選單">
                  <X className="w-6 h-6" />
                </button>
              </div>
@@ -134,7 +147,7 @@ const App: React.FC = () => {
                </a>
                <p className="text-xs text-slate-400 mt-4 font-medium">© {new Date().getFullYear()} 全國會考入口網整合平台</p>
              </div>
-          </div>
+          </aside>
         </div>
       )}
 
@@ -207,7 +220,7 @@ const App: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
+      <main id="main-content" tabIndex={-1} className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
         
         {/* Important Dates Ticker Card */}
         <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-sm border border-white/60 p-1.5 mb-16 relative overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
@@ -230,6 +243,7 @@ const App: React.FC = () => {
                 <button 
                     onClick={() => setIsScheduleModalOpen(true)}
                     className="w-full md:w-auto px-6 py-3.5 bg-slate-900 text-white hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/30 rounded-xl font-bold transition-all flex items-center justify-center gap-2 group/btn"
+                    aria-haspopup="dialog"
                 >
                     查看完整時程
                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
@@ -276,6 +290,7 @@ const App: React.FC = () => {
                 <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat as RegionCategory | 'ALL')}
+                aria-pressed={selectedCategory === cat}
                 className={`px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 backdrop-blur-sm ${
                     selectedCategory === cat
                     ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20 scale-105'
