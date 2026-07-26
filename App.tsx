@@ -1,12 +1,13 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { lazy, Suspense, useState, useMemo, useEffect } from 'react';
 import { Search, GraduationCap, Map, BookOpen, ExternalLink, HelpCircle, Calendar, Clock, Share2, BarChart3, Menu, X, Users, Mail, ArrowRight, Sparkles, QrCode } from 'lucide-react';
 import { PORTAL_DATA } from './constants';
 import { RegionCategory } from './types';
 import { LinkCard } from './components/LinkCard';
 import { CountdownTimer } from './components/CountdownTimer';
-import { ShareModal } from './components/ShareModal';
-import { PromotionModal } from './components/PromotionModal';
 import { ResourceCard } from './components/ResourceCard';
+
+const ShareModal = lazy(() => import('./components/ShareModal').then(({ ShareModal }) => ({ default: ShareModal })));
+const PromotionModal = lazy(() => import('./components/PromotionModal').then(({ PromotionModal }) => ({ default: PromotionModal })));
 
 const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -142,8 +143,8 @@ const App: React.FC = () => {
       )}
 
       {/* Modals */}
-      <PromotionModal isOpen={isPromoModalOpen} onClose={() => setIsPromoModalOpen(false)} />
-      <ShareModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} />
+      {isPromoModalOpen && <Suspense fallback={null}><PromotionModal isOpen onClose={() => setIsPromoModalOpen(false)} /></Suspense>}
+      {isShareModalOpen && <Suspense fallback={null}><ShareModal isOpen onClose={() => setIsShareModalOpen(false)} /></Suspense>}
       <button onClick={() => setIsShareModalOpen(true)} className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3.5 text-sm font-black text-white shadow-[0_18px_35px_-14px_rgba(15,23,42,.45)] transition hover:-translate-y-1 hover:bg-indigo-600 hover:shadow-indigo-500/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 sm:bottom-6 sm:right-6" aria-label="分享網站"><Share2 className="h-5 w-5" /><span className="hidden sm:inline">分享網站</span></button>
 
       {/* Hero Section */}
@@ -154,7 +155,7 @@ const App: React.FC = () => {
             <div className="rounded-[2rem] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-indigo-50 p-4 shadow-inner shadow-violet-100/50 sm:p-6"><div className="rounded-[1.5rem] border border-white bg-white/85 p-5 shadow-[0_16px_40px_-28px_rgba(79,70,229,.4)]"><CountdownTimer compact /><div className="mt-5 grid grid-cols-3 gap-2"><div className="rounded-2xl bg-indigo-50 p-3 text-center"><p className="text-[10px] font-black text-indigo-500">第一步</p><p className="mt-1 text-xs font-black text-slate-700">確認考區</p></div><div className="rounded-2xl bg-violet-50 p-3 text-center"><p className="text-[10px] font-black text-violet-500">第二步</p><p className="mt-1 text-xs font-black text-slate-700">查詢序位</p></div><div className="rounded-2xl bg-fuchsia-50 p-3 text-center"><p className="text-[10px] font-black text-fuchsia-500">第三步</p><p className="mt-1 text-xs font-black text-slate-700">安排志願</p></div></div><p className="mt-5 text-sm font-medium leading-6 text-slate-500">從掌握時程開始，循序完成每一個升學準備步驟。</p></div></div>
           </div>
         </section>
-        <div className="hidden relative z-10 mx-auto flex max-w-7xl flex-col items-center overflow-hidden rounded-[2.5rem] border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,.94),rgba(245,243,255,.78))] p-6 text-center shadow-[0_28px_70px_-42px_rgba(67,56,202,.45)] backdrop-blur-xl sm:p-10 lg:p-12">
+        {false && <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center overflow-hidden rounded-[2.5rem] border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,.94),rgba(245,243,255,.78))] p-6 text-center shadow-[0_28px_70px_-42px_rgba(67,56,202,.45)] backdrop-blur-xl sm:p-10 lg:p-12">
           
           {/* Notification Badge */}
           <div className="mb-8 inline-flex cursor-default select-none items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-600 shadow-sm transition-colors hover:bg-indigo-100 animate-fade-in-up">
@@ -210,7 +211,7 @@ const App: React.FC = () => {
              </div>
           </div>
           
-        </div>
+        </div>}
       </header>
 
       {/* Main Content */}
