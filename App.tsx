@@ -284,7 +284,7 @@ const App: React.FC = () => {
                 key={cat}
                 onClick={() => setSelectedCategory(cat as RegionCategory | 'ALL')}
                 aria-pressed={selectedCategory === cat}
-                className={`px-6 py-3 rounded-2xl text-sm font-bold transition-all duration-300 backdrop-blur-sm ${
+                className={`px-6 py-3 rounded-2xl text-sm font-black transition-all duration-300 backdrop-blur-sm ${
                     selectedCategory === cat
                     ? 'bg-slate-900 text-white shadow-xl shadow-slate-900/20 scale-105'
                     : 'bg-white/60 text-slate-600 hover:bg-white hover:text-indigo-600 border border-white/60 shadow-sm hover:shadow-md'
