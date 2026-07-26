@@ -1,35 +1,31 @@
 import React, { useState } from 'react';
-import { ExternalLink, MapPin } from 'lucide-react';
-import { RegionLink } from '../types';
+import { ArrowUpRight, MapPin } from 'lucide-react';
+import { RegionCategory, RegionLink } from '../types';
 import { RedirectWarningModal } from './RedirectWarningModal';
 
 interface LinkCardProps {
   link: RegionLink;
 }
 
-// Target Date: 2026/06/17 18:27:00
-const TARGET_DATE = new Date('2026-06-17T18:27:00');
+const TARGET_DATE = new Date('2027-06-17T18:27:00');
+
+const categoryThemes = [
+  { accent: 'from-blue-500 to-cyan-400', soft: 'bg-blue-50', ink: 'text-blue-600', ring: 'ring-blue-100', button: 'hover:bg-blue-600', glow: 'group-hover:shadow-blue-500/20' },
+  { accent: 'from-emerald-500 to-teal-400', soft: 'bg-emerald-50', ink: 'text-emerald-600', ring: 'ring-emerald-100', button: 'hover:bg-emerald-600', glow: 'group-hover:shadow-emerald-500/20' },
+  { accent: 'from-orange-500 to-amber-400', soft: 'bg-orange-50', ink: 'text-orange-600', ring: 'ring-orange-100', button: 'hover:bg-orange-600', glow: 'group-hover:shadow-orange-500/20' },
+  { accent: 'from-violet-500 to-fuchsia-400', soft: 'bg-violet-50', ink: 'text-violet-600', ring: 'ring-violet-100', button: 'hover:bg-violet-600', glow: 'group-hover:shadow-violet-500/20' },
+  { accent: 'from-slate-600 to-slate-400', soft: 'bg-slate-100', ink: 'text-slate-600', ring: 'ring-slate-200', button: 'hover:bg-slate-700', glow: 'group-hover:shadow-slate-500/20' },
+];
 
 export const LinkCard: React.FC<LinkCardProps> = ({ link }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const categoryIndex = Math.max(0, Object.values(RegionCategory).indexOf(link.category));
+  const theme = categoryThemes[categoryIndex] ?? categoryThemes[4];
 
-  const getCategoryTheme = (category: string) => {
-    switch(category) {
-        case '北部': return { bg: 'bg-blue-50', text: 'text-blue-600', hoverShadow: 'hover:shadow-blue-500/20', iconBg: 'bg-blue-100' };
-        case '中部': return { bg: 'bg-emerald-50', text: 'text-emerald-600', hoverShadow: 'hover:shadow-emerald-500/20', iconBg: 'bg-emerald-100' };
-        case '南部': return { bg: 'bg-orange-50', text: 'text-orange-600', hoverShadow: 'hover:shadow-orange-500/20', iconBg: 'bg-orange-100' };
-        case '東部': return { bg: 'bg-violet-50', text: 'text-violet-600', hoverShadow: 'hover:shadow-violet-500/20', iconBg: 'bg-violet-100' };
-        default: return { bg: 'bg-slate-100', text: 'text-slate-600', hoverShadow: 'hover:shadow-slate-500/20', iconBg: 'bg-slate-200' };
-    }
-  };
-
-  const theme = getCategoryTheme(link.category);
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const now = new Date();
-    if (now < TARGET_DATE) {
-        e.preventDefault();
-        setIsModalOpen(true);
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (new Date() < TARGET_DATE) {
+      event.preventDefault();
+      setIsModalOpen(true);
     }
   };
 
@@ -38,57 +34,29 @@ export const LinkCard: React.FC<LinkCardProps> = ({ link }) => {
     window.open(link.url, '_blank', 'noopener,noreferrer');
   };
 
-  return (
-    <>
-        <div className={`bg-white/80 backdrop-blur-sm rounded-[24px] p-1.5 border border-white/60 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] hover:shadow-2xl ${theme.hoverShadow} transition-all duration-300 hover:-translate-y-1.5 h-full flex flex-col group relative overflow-hidden`}>
-            {/* Inner Content */}
-            <div className="bg-white/50 rounded-[20px] p-6 flex-1 flex flex-col h-full border border-white/20">
-                <div className="flex justify-between items-start mb-5">
-                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${theme.iconBg} ${theme.text} shadow-sm group-hover:scale-110 transition-transform duration-300`}>
-                        <MapPin className="w-6 h-6" />
-                    </div>
-                    <span className={`px-3 py-1.5 text-[11px] font-black rounded-full ${theme.bg} ${theme.text} uppercase tracking-wider border border-white/50`}>
-                        {link.category}
-                    </span>
-                </div>
-                
-                <h3 className="text-xl font-bold text-slate-800 mb-3 group-hover:text-indigo-600 transition-colors tracking-tight">
-                {link.name}
-                </h3>
-                
-                <p className="text-slate-500 text-sm mb-6 leading-relaxed line-clamp-2 font-medium">
-                {link.description}
-                </p>
-
-                <div className="flex flex-wrap gap-2 mt-auto">
-                {link.tags.map(tag => (
-                    <span key={tag} className="text-xs font-bold text-slate-400 bg-slate-100/80 px-2.5 py-1.5 rounded-lg border border-slate-200/50">
-                    #{tag}
-                    </span>
-                ))}
-                </div>
-            </div>
-
-            <div className="px-6 pb-4 pt-3">
-                <a 
-                href={link.url} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                onClick={handleClick}
-                className="flex items-center justify-center w-full py-4 bg-slate-900 text-white font-bold rounded-2xl hover:bg-indigo-600 transition-all duration-300 gap-2 group/btn cursor-pointer shadow-lg shadow-slate-900/10 hover:shadow-indigo-500/30"
-                >
-                前往網站
-                <ExternalLink className="w-4 h-4 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5 transition-transform" />
-                </a>
-            </div>
+  return <>
+    <article className={`group relative flex h-full flex-col overflow-hidden rounded-[1.7rem] border border-slate-200/80 bg-white p-1 shadow-[0_10px_30px_-20px_rgba(15,23,42,.3)] transition duration-300 hover:-translate-y-1.5 hover:shadow-xl ${theme.glow}`}>
+      <div className={`h-1.5 w-full rounded-full bg-gradient-to-r ${theme.accent}`} />
+      <div className="relative flex flex-1 flex-col overflow-hidden rounded-[1.35rem] px-5 pb-5 pt-5 sm:px-6 sm:pb-6">
+        <div className={`pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full ${theme.soft} opacity-80 blur-2xl transition duration-500 group-hover:scale-125`} />
+        <div className={`relative flex items-center justify-between rounded-2xl ${theme.soft} px-4 py-3 ring-1 ${theme.ring}`}>
+          <div className="flex min-w-0 items-center gap-3"><span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/75 ${theme.ink} shadow-sm`}><MapPin className="h-5 w-5" /></span><div className="min-w-0"><p className={`text-[10px] font-black tracking-[0.16em] ${theme.ink}`}>就學區入口</p><h3 className="mt-0.5 text-base font-black leading-5 tracking-tight text-slate-800 sm:text-lg">{link.name}</h3></div></div>
+          <span className={`rounded-full bg-white/75 px-2.5 py-1 text-[10px] font-black ${theme.ink}`}>就學區</span>
         </div>
 
-        <RedirectWarningModal 
-            isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            onConfirm={handleConfirmRedirect}
-            siteName={link.name}
-        />
-    </>
-  );
+        <div className="relative mt-6 rounded-2xl border border-slate-100 bg-slate-50/80 p-4">
+          <p className={`text-[10px] font-black tracking-[0.16em] ${theme.ink}`}>官方免試入學系統</p>
+          <p className="mt-2 text-sm font-bold leading-6 text-slate-700">{link.description}</p>
+          <div className="mt-3 h-px bg-slate-200/70" />
+          <div className="mt-3 flex flex-wrap items-center gap-2"><span className="mr-1 text-[10px] font-black tracking-[0.12em] text-slate-400">服務項目</span>{link.tags.map(tag => <span key={tag} className={`rounded-lg bg-white px-2.5 py-1.5 text-[11px] font-black ${theme.ink} ring-1 ${theme.ring}`}>#{tag}</span>)}</div>
+        </div>
+
+        <a href={link.url} target="_blank" rel="noopener noreferrer" onClick={handleClick} className={`relative mt-6 flex items-center justify-between rounded-2xl bg-slate-900 px-4 py-3.5 text-sm font-black text-white shadow-lg shadow-slate-900/10 transition duration-300 ${theme.button} focus:outline-none focus-visible:ring-4 focus-visible:ring-slate-200`}>
+          <span>前往網站</span><span className="flex h-7 w-7 items-center justify-center rounded-xl bg-white/15 transition-transform duration-300 group-hover:translate-x-0.5"><ArrowUpRight className="h-4 w-4" /></span>
+        </a>
+      </div>
+    </article>
+
+    <RedirectWarningModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirmRedirect} siteName={link.name} />
+  </>;
 };

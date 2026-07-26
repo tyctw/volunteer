@@ -31,12 +31,12 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ href, icon, title, d
         <div className={`flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${fromColor} ${toColor} text-white shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3`}>
           {icon}
         </div>
-        <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-[11px] font-black tracking-wide text-slate-500 shadow-sm">工具</span>
+        <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-[11px] font-black tracking-wide text-slate-500 shadow-sm">升學工具</span>
       </div>
       <h3 className="mt-5 text-xl font-black tracking-tight text-slate-900">{title}</h3>
       <p className="mt-2 flex-1 text-sm font-medium leading-6 text-slate-500">{desc}</p>
       <div className="mt-5 flex items-center justify-between rounded-2xl bg-slate-900 px-4 py-3 text-sm font-black text-white transition-colors duration-300 group-hover:bg-indigo-600">
-        <span>立即前往</span>
+        <span>開始探索</span>
         <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/15"><ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" /></span>
       </div>
     </div>

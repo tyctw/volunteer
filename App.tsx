@@ -3,7 +3,6 @@ import { Search, GraduationCap, Map, BookOpen, ExternalLink, HelpCircle, Calenda
 import { PORTAL_DATA } from './constants';
 import { RegionCategory } from './types';
 import { LinkCard } from './components/LinkCard';
-import { ScheduleModal } from './components/ScheduleModal';
 import { CountdownTimer } from './components/CountdownTimer';
 import { ShareModal } from './components/ShareModal';
 import { PromotionModal } from './components/PromotionModal';
@@ -13,7 +12,6 @@ const App: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<RegionCategory | 'ALL'>('ALL');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [isPromoModalOpen, setIsPromoModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -75,14 +73,6 @@ const App: React.FC = () => {
                 會考官網 <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
-
-            <button 
-                onClick={() => setIsShareModalOpen(true)}
-                className="p-2.5 text-slate-500 hover:bg-white hover:text-indigo-600 rounded-xl transition-all shadow-sm border border-transparent hover:border-slate-200 hover:shadow-md hidden md:flex items-center justify-center"
-                aria-label="分享網站"
-            >
-                <QrCode className="w-5 h-5" />
-            </button>
 
             <button 
               onClick={() => setIsDrawerOpen(true)}
@@ -152,52 +142,59 @@ const App: React.FC = () => {
       )}
 
       {/* Modals */}
-      <ScheduleModal isOpen={isScheduleModalOpen} onClose={() => setIsScheduleModalOpen(false)} />
       <PromotionModal isOpen={isPromoModalOpen} onClose={() => setIsPromoModalOpen(false)} />
       <ShareModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} />
+      <button onClick={() => setIsShareModalOpen(true)} className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-3.5 text-sm font-black text-white shadow-[0_18px_35px_-14px_rgba(15,23,42,.45)] transition hover:-translate-y-1 hover:bg-indigo-600 hover:shadow-indigo-500/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-indigo-200 sm:bottom-6 sm:right-6" aria-label="分享網站"><Share2 className="h-5 w-5" /><span className="hidden sm:inline">分享網站</span></button>
 
       {/* Hero Section */}
-      <header className="relative pt-32 pb-10 px-4 overflow-visible">
-        <div className="max-w-6xl mx-auto text-center relative z-10 flex flex-col items-center">
+      <header className="relative overflow-visible px-4 pb-12 pt-28 sm:pt-32">
+        <section className="relative z-10 mx-auto max-w-7xl overflow-hidden rounded-[2.5rem] border border-white/80 bg-white/80 p-7 shadow-[0_28px_70px_-42px_rgba(67,56,202,.4)] backdrop-blur-xl sm:p-10 lg:p-12">
+          <div className="grid items-center gap-10 lg:grid-cols-[1.08fr_.92fr] lg:gap-14">
+            <div className="text-center lg:text-left"><span className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-4 py-2 text-xs font-black tracking-wide text-indigo-700"><Sparkles className="h-4 w-4" />116 學年度升學資訊</span><h1 className="mt-7 text-5xl font-black leading-[1.05] tracking-tighter text-slate-900 sm:text-6xl lg:text-7xl">國中教育會考<span className="mt-2 block bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 bg-clip-text text-transparent">&amp; 志願選填</span></h1><span className="mt-5 inline-flex rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-base font-black text-slate-600">查詢網址</span><p className="mt-7 max-w-2xl text-base font-medium leading-8 text-slate-600 sm:text-lg">彙整全國各就學區的志願選填、序位查詢與放榜查詢連結，快速找到您的考區，掌握升學關鍵時刻。</p><div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start"><a href="#main-content" className="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 py-3.5 text-sm font-black text-white shadow-lg shadow-indigo-500/25 transition hover:-translate-y-0.5 hover:shadow-xl">查看各區入口 <ArrowRight className="h-4 w-4" /></a><a href="schedule.html" className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3.5 text-sm font-black text-slate-700 shadow-sm transition hover:border-indigo-200 hover:text-indigo-700"><Calendar className="h-4 w-4" />重要日程</a></div></div>
+            <div className="rounded-[2rem] border border-violet-100 bg-gradient-to-br from-violet-50 via-white to-indigo-50 p-4 shadow-inner shadow-violet-100/50 sm:p-6"><div className="rounded-[1.5rem] border border-white bg-white/85 p-5 shadow-[0_16px_40px_-28px_rgba(79,70,229,.4)]"><CountdownTimer compact /><div className="mt-5 grid grid-cols-3 gap-2"><div className="rounded-2xl bg-indigo-50 p-3 text-center"><p className="text-[10px] font-black text-indigo-500">第一步</p><p className="mt-1 text-xs font-black text-slate-700">確認考區</p></div><div className="rounded-2xl bg-violet-50 p-3 text-center"><p className="text-[10px] font-black text-violet-500">第二步</p><p className="mt-1 text-xs font-black text-slate-700">查詢序位</p></div><div className="rounded-2xl bg-fuchsia-50 p-3 text-center"><p className="text-[10px] font-black text-fuchsia-500">第三步</p><p className="mt-1 text-xs font-black text-slate-700">安排志願</p></div></div><p className="mt-5 text-sm font-medium leading-6 text-slate-500">從掌握時程開始，循序完成每一個升學準備步驟。</p></div></div>
+          </div>
+        </section>
+        <div className="hidden relative z-10 mx-auto flex max-w-7xl flex-col items-center overflow-hidden rounded-[2.5rem] border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,.94),rgba(245,243,255,.78))] p-6 text-center shadow-[0_28px_70px_-42px_rgba(67,56,202,.45)] backdrop-blur-xl sm:p-10 lg:p-12">
           
           {/* Notification Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-xs font-bold mb-10 animate-fade-in-up shadow-sm hover:bg-indigo-100 transition-colors cursor-default select-none">
+          <div className="mb-8 inline-flex cursor-default select-none items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-bold text-indigo-600 shadow-sm transition-colors hover:bg-indigo-100 animate-fade-in-up">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
             </span>
-            115 學年度升學資訊同步更新中
+            116 學年度升學資訊同步更新中
           </div>
 
           {/* Main Title */}
-          <div className="relative mb-10">
-              <h1 className="text-6xl md:text-8xl font-black text-slate-900 tracking-tighter leading-[1.1]">
+          <div className="relative mb-8 grid w-full items-stretch gap-6 lg:grid-cols-[minmax(0,1fr)_26rem] lg:text-left">
+            <div className="relative px-3 py-5 text-center lg:px-6 lg:text-left">
+              <h1 className="text-5xl font-black leading-[1.02] tracking-tighter text-slate-900 sm:text-6xl md:text-7xl">
                   國中教育會考
                   <span className="block text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-fuchsia-600 pb-2">
                       & 志願選填
                   </span>
-                  <span className="relative inline-block text-slate-800">
+                  <span className="relative mt-5 inline-flex rounded-full border border-indigo-100 bg-indigo-50 px-5 py-2 text-lg text-indigo-700 shadow-sm sm:text-xl">
                       查詢網址
                       {/* Decorative underline */}
-                      <svg className="absolute w-full h-3 md:h-4 -bottom-1 left-0 text-indigo-400 opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
+                      <svg className="hidden absolute w-full h-3 md:h-4 -bottom-1 left-0 text-indigo-400 opacity-50" viewBox="0 0 100 10" preserveAspectRatio="none">
                           <path d="M0 5 Q 50 10 100 5" stroke="currentColor" strokeWidth="4" fill="none" />
                       </svg>
                   </span>
               </h1>
+              <div className="mt-7 flex max-w-3xl flex-col items-center gap-3 lg:items-start lg:text-left">
+                <p className="text-base font-medium leading-7 text-slate-600 sm:text-lg">彙整全國各就學區的<span className="mx-1 font-black text-indigo-600">志願選填</span>、<span className="mx-1 font-black text-indigo-600">序位查詢</span>與<span className="mx-1 font-black text-indigo-600">放榜查詢</span>連結。</p>
+                <p className="inline-flex items-center gap-2 text-sm font-black text-violet-700"><Sparkles className="h-4 w-4" />快速找到您的考區，掌握升學關鍵時刻</p>
+              </div>
               
               {/* Decorative elements behind title */}
               <div className="absolute -top-10 -right-10 w-24 h-24 bg-yellow-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob pointer-events-none"></div>
               <div className="absolute -bottom-10 -left-10 w-24 h-24 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 pointer-events-none"></div>
+            </div>
+            <CountdownTimer compact />
           </div>
           
-          {/* Subtitle */}
-          <p className="text-lg md:text-xl text-slate-600 mb-12 max-w-2xl mx-auto leading-relaxed font-medium">
-            彙整全國各就學區<span className="text-indigo-600 font-bold mx-1">志願選填</span>、<span className="text-indigo-600 font-bold mx-1">序位查詢</span>及<span className="text-indigo-600 font-bold mx-1">放榜查詢</span>連結。<br className="hidden md:block"/>
-            快速找到您的考區，掌握升學關鍵時刻。
-          </p>
-          
           {/* Search Box Container */}
-          <div className="w-full max-w-2xl relative group z-20">
+          <div className="group relative z-20 mt-8 w-full max-w-3xl">
              <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-[2rem] opacity-30 blur group-hover:opacity-50 transition duration-500"></div>
              <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
@@ -213,14 +210,11 @@ const App: React.FC = () => {
              </div>
           </div>
           
-          <div className="mt-16 w-full">
-            <CountdownTimer />
-          </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main id="main-content" tabIndex={-1} className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24 relative z-10">
+      <main id="main-content" tabIndex={-1} className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 pb-24 sm:px-6 lg:px-8">
         
         {/* Important Dates Ticker Card */}
         <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-sm border border-white/60 p-1.5 mb-16 relative overflow-hidden group hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
@@ -232,22 +226,21 @@ const App: React.FC = () => {
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1.5">
                             <h3 className="font-bold text-slate-800 text-lg">重要日程快訊</h3>
-                            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide shadow-md shadow-red-500/20">HOT</span>
+                            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full tracking-wide shadow-md shadow-red-500/20">熱門</span>
                         </div>
                         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600 font-medium">
-                            <span className="flex items-center gap-1.5 bg-white/60 px-2 py-1 rounded-md border border-white"><Clock className="w-3.5 h-3.5 text-orange-500" /> 個人序位：115/06/18</span>
-                            <span className="flex items-center gap-1.5 bg-white/60 px-2 py-1 rounded-md border border-white"><BookOpen className="w-3.5 h-3.5 text-blue-500" /> 志願選填：115/06/18(四) - 115/06/25(四)</span>
+                            <span className="flex items-center gap-1.5 bg-white/60 px-2 py-1 rounded-md border border-white"><Clock className="w-3.5 h-3.5 text-orange-500" /> 個人序位：116/06/18</span>
+                            <span className="flex items-center gap-1.5 bg-white/60 px-2 py-1 rounded-md border border-white"><BookOpen className="w-3.5 h-3.5 text-blue-500" /> 志願選填：116/06/18 - 116/06/25</span>
                         </div>
                     </div>
                 </div>
-                <button 
-                    onClick={() => setIsScheduleModalOpen(true)}
+                <a
+                    href="schedule.html"
                     className="w-full md:w-auto px-6 py-3.5 bg-slate-900 text-white hover:bg-indigo-600 hover:shadow-lg hover:shadow-indigo-500/30 rounded-xl font-bold transition-all flex items-center justify-center gap-2 group/btn"
-                    aria-haspopup="dialog"
                 >
                     查看完整時程
                     <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </button>
+                </a>
             </div>
         </div>
 
@@ -257,7 +250,7 @@ const App: React.FC = () => {
                 href="https://tyctw.github.io/score/"
                 icon={<Share2 className="w-7 h-7" />}
                 title="會考序位分享"
-                desc="匿名分享會考成績與序位。"
+                desc="分享你的成績與序位，讓真實資料幫更多人找到適合的志願。"
                 fromColor="from-emerald-400"
                 toColor="to-teal-500"
                 shadowColor="shadow-emerald-500/30"
@@ -266,7 +259,7 @@ const App: React.FC = () => {
                 href="https://tyctw.github.io/"
                 icon={<BarChart3 className="w-7 h-7" />}
                 title="會考落點分析"
-                desc="輸入成績，取得志願建議。"
+                desc="輸入會考成績，快速掌握可能錄取的學校與選填方向。"
                 fromColor="from-violet-400"
                 toColor="to-purple-500"
                 shadowColor="shadow-purple-500/30"
@@ -275,7 +268,7 @@ const App: React.FC = () => {
                 href="https://tyctw.github.io/shared/"
                 icon={<Users className="w-7 h-7" />}
                 title="會考錄取分享"
-                desc="查詢歷年錄取分數與志願序。"
+                desc="查看真實錄取結果與志願序，選填前多一份有依據的參考。"
                 fromColor="from-orange-400"
                 toColor="to-amber-500"
                 shadowColor="shadow-orange-500/30"
@@ -284,7 +277,7 @@ const App: React.FC = () => {
 
         {/* Filters */}
         <div className="flex flex-col items-center mb-12 space-y-5">
-            <h3 className="text-slate-400 text-xs font-black uppercase tracking-[0.25em] bg-white/50 px-4 py-1 rounded-full border border-white">選擇考區 Select Region</h3>
+            <h3 className="text-slate-400 text-xs font-black tracking-[0.25em] bg-white/50 px-4 py-1 rounded-full border border-white">選擇考區</h3>
             <div className="flex flex-wrap justify-center gap-3">
             {categories.map((cat) => (
                 <button
@@ -317,6 +310,14 @@ const App: React.FC = () => {
                 </span>
             </div>
 
+            {selectedCategory === 'ALL' && (
+              <section className="hidden grid gap-3 rounded-[1.75rem] border border-violet-100 bg-violet-50/55 p-3 sm:grid-cols-3 sm:gap-4 sm:p-4" aria-label="選填文章推薦">
+                <a href="guide.html" className="group rounded-2xl border border-white bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"><BookOpen className="h-4 w-4" /></span><p className="mt-3 text-[10px] font-black tracking-[0.13em] text-indigo-600">第一次選填？</p><h3 className="mt-1 text-sm font-black text-slate-800">別急著填！先搞懂志願排序</h3><p className="mt-1 text-xs font-medium leading-5 text-slate-500">從準備到送出，避免把最想讀的學校排錯位置。</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-black text-indigo-600">立即看攻略 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span></a>
+                <a href="ranking.html" className="group rounded-2xl border border-white bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-md"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-violet-600"><BarChart3 className="h-4 w-4" /></span><p className="mt-3 text-[10px] font-black tracking-[0.13em] text-violet-600">成績公布後</p><h3 className="mt-1 text-sm font-black text-slate-800">你的序位，能填到哪裡？</h3><p className="mt-1 text-xs font-medium leading-5 text-slate-500">用個人序位判讀落點，把有機會的志願排進清單。</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-black text-violet-600">看懂序位 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span></a>
+                <a href="after-submission.html" className="group rounded-2xl border border-white bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"><Calendar className="h-4 w-4" /></span><p className="mt-3 text-[10px] font-black tracking-[0.13em] text-emerald-600">送出還沒結束</p><h3 className="mt-1 text-sm font-black text-slate-800">送出志願後，還有三件事別忘了</h3><p className="mt-1 text-xs font-medium leading-5 text-slate-500">放榜、報到與後續流程一次掌握，避免錯過關鍵日期。</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-black text-emerald-600">查看清單 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span></a>
+              </section>
+            )}
+
             {filteredLinks.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredLinks.map((link) => (
@@ -336,6 +337,15 @@ const App: React.FC = () => {
                     清除搜尋條件
                 </button>
             </div>
+            )}
+
+            {selectedCategory === 'ALL' && filteredLinks.length > 0 && (
+              <section className="grid gap-3 rounded-[1.75rem] border border-violet-100 bg-violet-50/55 p-4 sm:grid-cols-3 sm:gap-4 sm:p-5" aria-label="選填文章推薦">
+                <div className="flex flex-col gap-1 px-1 pb-1 sm:col-span-3"><p className="text-xs font-black tracking-[0.14em] text-violet-600">延伸閱讀</p><h3 className="text-xl font-black tracking-tight text-slate-800">選填前後，這三篇先看</h3><p className="text-sm font-medium leading-6 text-slate-500">用幾分鐘掌握排序、序位與送出後的關鍵提醒。</p></div>
+                <a href="guide.html" className="group rounded-2xl border border-white bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-md"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600"><BookOpen className="h-4 w-4" /></span><p className="mt-3 text-[10px] font-black tracking-[0.13em] text-indigo-600">第一次選填？</p><h3 className="mt-1 text-sm font-black text-slate-800">別急著填！先搞懂志願排序</h3><p className="mt-1 text-xs font-medium leading-5 text-slate-500">從準備到送出，避免把最想讀的學校排錯位置。</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-black text-indigo-600">立即看攻略 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span></a>
+                <a href="ranking.html" className="group rounded-2xl border border-white bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-violet-200 hover:shadow-md"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-violet-600"><BarChart3 className="h-4 w-4" /></span><p className="mt-3 text-[10px] font-black tracking-[0.13em] text-violet-600">成績公布後</p><h3 className="mt-1 text-sm font-black text-slate-800">你的序位，能填到哪裡？</h3><p className="mt-1 text-xs font-medium leading-5 text-slate-500">用個人序位判讀落點，把有機會的志願排進清單。</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-black text-violet-600">看懂序位 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span></a>
+                <a href="after-submission.html" className="group rounded-2xl border border-white bg-white/85 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:shadow-md"><span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"><Calendar className="h-4 w-4" /></span><p className="mt-3 text-[10px] font-black tracking-[0.13em] text-emerald-600">送出還沒結束</p><h3 className="mt-1 text-sm font-black text-slate-800">送出志願後，還有三件事別忘了</h3><p className="mt-1 text-xs font-medium leading-5 text-slate-500">放榜、報到與後續流程一次掌握，避免錯過關鍵日期。</p><span className="mt-3 inline-flex items-center gap-1 text-xs font-black text-emerald-600">查看清單 <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" /></span></a>
+              </section>
             )}
         </div>
 

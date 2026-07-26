@@ -4,7 +4,7 @@ export const PORTAL_DATA: RegionLink[] = [
   // North
   {
     id: 'ttk',
-    name: '基北區 (基隆/台北/新北)',
+    name: '基北區',
     url: 'https://ttk.entry.edu.tw',
     category: RegionCategory.NORTH,
     description: '基北區高級中等學校免試入學委員會',
@@ -12,7 +12,7 @@ export const PORTAL_DATA: RegionLink[] = [
   },
   {
     id: 'tyc',
-    name: '桃連區 (桃園/連江)',
+    name: '桃連區',
     url: 'https://tyc.entry.edu.tw',
     category: RegionCategory.NORTH,
     description: '桃連區高級中等學校免試入學系統',
@@ -20,7 +20,7 @@ export const PORTAL_DATA: RegionLink[] = [
   },
   {
     id: 'hhm',
-    name: '竹苗區 (新竹/苗栗)',
+    name: '竹苗區',
     url: 'https://hhm.entry.edu.tw',
     category: RegionCategory.NORTH,
     description: '竹苗區高級中等學校免試入學委員會',
@@ -38,7 +38,7 @@ export const PORTAL_DATA: RegionLink[] = [
   // Central
   {
     id: 'ct',
-    name: '中投區 (台中/南投)',
+    name: '中投區',
     url: 'https://ct.entry.edu.tw',
     category: RegionCategory.CENTRAL,
     description: '中投區高級中等學校免試入學系統',

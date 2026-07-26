@@ -14,6 +14,7 @@ export default defineConfig({
         articles: 'articles.html',
         guide: 'guide.html',
         info: 'info.html',
+        schedule: 'schedule.html',
         ranking: 'ranking.html',
         afterSubmission: 'after-submission.html',
       },
