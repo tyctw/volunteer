@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Timer } from 'lucide-react';
 
+// 僅採用已由國中教育會考官方公告的日期；其餘試務時程公布後再補入。
 const EVENTS = [
-  { name: '國中教育會考報名', date: '2027-03-05T08:00:00' },
-  { name: '寄發准考證', date: '2027-04-10T08:00:00' },
-  { name: '國中教育會考', date: '2027-05-16T08:00:00' },
-  { name: '會考成績公布', date: '2027-06-05T08:00:00' },
-  { name: '序位區間公告/志願選填', date: '2027-06-18T08:00:00' },
-  { name: '志願選填截止', date: '2027-06-25T17:00:00' },
-  { name: '免試入學放榜', date: '2027-07-07T11:00:00' },
+  { name: '國中教育會考首日', date: '2027-05-15T00:00:00+08:00' },
 ];
 
 export const CountdownTimer: React.FC<{ compact?: boolean }> = ({ compact = false }) => {
@@ -16,6 +11,8 @@ export const CountdownTimer: React.FC<{ compact?: boolean }> = ({ compact = fals
   const [targetEvent, setTargetEvent] = useState<{name: string, date: string} | null>(null);
 
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
     const calculateTime = () => {
       const now = new Date();
       const nextEvent = EVENTS.find(event => new Date(event.date).getTime() > now.getTime());
@@ -34,11 +31,13 @@ export const CountdownTimer: React.FC<{ compact?: boolean }> = ({ compact = fals
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
       });
+
+      // 對齊下一個整秒，而非以固定間隔累積誤差。
+      timeoutId = setTimeout(calculateTime, 1000 - (Date.now() % 1000));
     };
 
     calculateTime();
-    const timer = setInterval(calculateTime, 1000);
-    return () => clearInterval(timer);
+    return () => clearTimeout(timeoutId);
   }, []);
 
   if (!targetEvent || !timeLeft) return null;
